@@ -32,6 +32,8 @@ No app to install beyond one free, open-source tool. No background daemon of our
 
 Works with Wispr Flow, or **any dictation app with a hold-to-talk key**.
 
+> **PS:** after building this I realized Wispr Flow lets you assign a mouse button natively, so the middle button works out of the box. But I love how the right one feels, for some reason 😂 lazy-whisper keeps your quick right-click as a normal right-click and only dictates when you hold it.
+
 ## ⚡ Install in 3 minutes
 
 **You need:** macOS · an external mouse · [Karabiner-Elements](https://karabiner-elements.pqrs.org) (free)
