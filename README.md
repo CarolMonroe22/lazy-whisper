@@ -4,7 +4,7 @@
 
 **Hold right-click. Talk. Let go. Done.**
 
-Dictate with [Wispr Flow](https://wisprflow.ai) without ever reaching for the keyboard.<br>
+Dictate with [Wispr Flow](https://wisprflow.ai/r?CAROL129) without ever reaching for the keyboard.<br>
 One hand on the mouse, the other holding your coffee.
 
 ![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
