@@ -1,56 +1,67 @@
+<div align="center">
+
 # lazy-whisper 🎙️
 
-Hold your mouse's right button to dictate with [Wispr Flow](https://wisprflow.ai). Let go and it transcribes. A quick right-click still opens the normal context menu.
+**Hold right-click. Talk. Let go. Done.**
 
-Your other hand never has to leave what it's doing. Peak laziness, fully intentional.
+Dictate with [Wispr Flow](https://wisprflow.ai) without ever reaching for the keyboard.<br>
+One hand on the mouse, the other holding your coffee.
+
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
+![Karabiner-Elements](https://img.shields.io/badge/Karabiner--Elements-rule-5A45FF)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+![Laziness](https://img.shields.io/badge/laziness-extreme-ff69b4)
+
+</div>
+
+---
+
+## The idea
+
+Push-to-talk dictation is magic. Except you still need a hand on the keyboard to hold `fn`.
+
+**lazy-whisper** moves push-to-talk to your mouse's right button:
 
 ```
- quick right-click  (< 0.7s) ──► normal context menu
- hold right-click   (≥ 0.7s) ──► holds Left Control ──► Wispr listens 🎙️
-                        release ──► Wispr transcribes
+ quick right-click  (< 0.7s) ──► normal context menu, nothing changes
+ hold right-click   (≥ 0.7s) ──► 🎙️ Wispr starts listening
+                        let go ──► ✨ your words appear
 ```
 
-It's a single [Karabiner-Elements](https://karabiner-elements.pqrs.org) rule. It works with any dictation app that has a hold-to-talk shortcut, not only Wispr.
+No app to install beyond one free, open-source tool. No background daemon of ours. It's **one Karabiner-Elements rule**, about 20 lines of JSON you can read in 10 seconds.
 
-## What you need
+Works with Wispr Flow, or **any dictation app with a hold-to-talk key**.
 
-- macOS
-- An **external mouse**. Karabiner can't remap the built-in Apple trackpad's right-click.
-- [Karabiner-Elements](https://karabiner-elements.pqrs.org) (free)
-- Wispr Flow, or any app with a push-to-talk key
+## ⚡ Install in 3 minutes
 
-## Setup
+**You need:** macOS · an external mouse · [Karabiner-Elements](https://karabiner-elements.pqrs.org) (free)
 
-### 1. Install Karabiner-Elements
+> 🖱️ Apple's built-in trackpad won't work. Karabiner can't remap its right-click, so you need a real mouse.
 
-Download it from [karabiner-elements.pqrs.org](https://karabiner-elements.pqrs.org), or:
+### 1 · Install Karabiner-Elements
 
 ```bash
 brew install --cask karabiner-elements
 ```
 
-> If you run `brew` from a place with no interactive terminal (like an AI agent), it fails because the installer needs your password. Open the `.pkg` manually instead.
+Or download it from [karabiner-elements.pqrs.org](https://karabiner-elements.pqrs.org).
 
-### 2. Grant the permissions
+### 2 · Grant the three permissions
 
-Open Karabiner-Elements and follow its guide. There are three, and all of them matter:
+Open Karabiner-Elements and follow its guide. **All three matter:**
 
-| Where (System Settings) | Turn on |
+| System Settings | Turn on |
 |---|---|
 | Privacy & Security → **Input Monitoring** | Karabiner-Core-Service, Karabiner-EventViewer |
-| General → Login Items & Extensions → **Allow in the Background** | Karabiner-Elements Non-Privileged Agents v2, Privileged Daemons v2 |
-| General → Login Items & Extensions → **Driver Extensions** (scroll down, click ⓘ) | Karabiner-DriverKit-VirtualHIDDevice |
+| General → Login Items & Extensions → **Allow in the Background** | Karabiner-Elements Agents v2 + Daemons v2 |
+| General → Login Items & Extensions → **Driver Extensions** ⓘ | Karabiner-DriverKit-VirtualHIDDevice |
 
-The driver extension is the one people miss. Without it nothing happens. You can check it in Terminal:
+> 👀 **The Driver Extension is the one everyone misses.** Scroll to the bottom of that page. Without it, nothing happens. Check it with:
+> ```bash
+> systemextensionsctl list | grep pqrs   # → [activated enabled]
+> ```
 
-```bash
-systemextensionsctl list | grep pqrs
-# should say: [activated enabled]
-```
-
-### 3. Import the rule
-
-Copy the rule into Karabiner's folder:
+### 3 · Add the rule
 
 ```bash
 mkdir -p ~/.config/karabiner/assets/complex_modifications
@@ -58,44 +69,49 @@ curl -L -o ~/.config/karabiner/assets/complex_modifications/lazy-whisper.json \
   https://raw.githubusercontent.com/CarolMonroe22/lazy-whisper/main/lazy-whisper.json
 ```
 
-Then in Karabiner-Elements: **Complex Modifications → Add predefined rule →** "Lazy Whisper" → **Enable**.
+Karabiner-Elements → **Complex Modifications → Add predefined rule →** "Lazy Whisper" → **Enable**.
 
-### 4. Turn on your mouse
+### 4 · Let Karabiner see your mouse
 
-In Karabiner-Elements → **Devices**, turn on **Modify events** for your mouse. Karabiner leaves mice alone by default, so the rule does nothing until you do this.
+Karabiner-Elements → **Devices** → turn on **Modify events** for your mouse. Mice are ignored by default.
 
-### 5. Set Left Control as push-to-talk in Wispr
+### 5 · Tell Wispr about Left Control
 
-Wispr Flow → Settings → Shortcuts → **Push to talk**: add **Left Control** (you can keep `fn` too).
+Wispr Flow → Settings → Shortcuts → **Push to talk** → add **Left Control**. You can keep `fn` too.
 
-> Why Control and not `fn`? Karabiner simulates Control reliably. Sending `fn` from a virtual keyboard is hit or miss depending on the app.
+> Why Control and not `fn`? Karabiner simulates Control reliably. A virtual `fn` is hit or miss.
 
-## Try it
+### 🎉 Try it
 
-| Do this | You get |
+Open any text box, hold right-click, say something, and let go.
+
+## 🎛️ Make it yours
+
+It's plain JSON, so tweak away:
+
+| Want | Change |
 |---|---|
-| Quick right-click | normal context menu |
-| Hold right-click about 1s, talk, let go | Wispr transcribes |
+| Faster or slower trigger | both `700` values (ms). `500` feels snappy, `1000` is safer |
+| A different dictation app | `"left_control"` → that app's hold-to-talk key ([key names](https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/)) |
+| Middle or side button instead | `"button2"` → `"button3"` (middle), `"button4"` / `"button5"` (side) |
 
-## Customize
+## 🩺 Troubleshooting
 
-**Timing.** Change both `700` values in the JSON (in milliseconds). Around 500 feels snappier, and around 1000 makes accidental triggers less likely. Keep both numbers equal.
+| Symptom | Fix |
+|---|---|
+| Nothing happens | Driver Extension (step 2) + **Modify events** on your mouse (step 4) |
+| Right-click menu feels a beat late | Expected: a short click now fires on *release*. Lower the timing if it bugs you |
+| Wispr doesn't start listening | Left Control isn't set as push-to-talk in Wispr (step 5) |
+| Still stuck | Logs live in `~/.local/share/karabiner/log/` |
 
-**Different key.** If your dictation app uses another push-to-talk key, change `"left_control"` to that key. Karabiner's key names are in [its docs](https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/).
+## 💜 Credits
 
-**Different button.** Change `"button2"` (right) to `"button3"` (middle) or `"button4"` / `"button5"` (side buttons). With a side button you can drop `to_if_alone` if you never use its original action.
+Built by [Carol Monroe](https://carolmonroe.com), who didn't want to move her other hand.
 
-## Troubleshooting
+Powered by [Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements), the brilliant open-source work of Fumihiko Takayama. Not affiliated with Wispr.
 
-- **Nothing happens.** Check the driver extension (step 2) and **Modify events** on your mouse (step 4).
-- **Right-click menu feels slow.** That's expected. The normal right-click fires when you *release* the button, not when you press it. Lower the timing if it bothers you.
-- **Wispr doesn't start.** Make sure Left Control is set as push-to-talk in Wispr (step 5).
-- **Logs:** `~/.local/share/karabiner/log/`
-
-## Credits
-
-Made by [Carol Monroe](https://carolmonroe.com). Built with [Karabiner-Elements](https://github.com/pqrs-org/Karabiner-Elements) by Fumihiko Takayama. Not affiliated with Wispr.
+PRs welcome: new variants, other dictation apps, better defaults. Keep it lazy.
 
 ## License
 
-MIT
+[MIT](LICENSE). Take it, remix it, be lazy with it.
